@@ -41,15 +41,21 @@ var source = [
     './src/calculate/map.js',
 
     /**
-     * 图形
+     * 2D图形
      */
     './src/graphics/index.js',
-    './src/graphics/arc.2d.js',
+    './src/graphics/arc.js',
 
     /**
      * 布局
      */
-    './src/layout/tree.js'
+    './src/layout/tree.js',
+
+    /**
+     * 3D核心接口
+     */
+    './src/webgl/shader.js',
+    './src/webgl/index.js'
 
 ];
 
