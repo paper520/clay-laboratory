@@ -16,6 +16,7 @@ var source = [
      */
     './src/Tools/animation.js',
     './src/Tools/tool.js',
+    './src/Tools/ajax.js',
 
     /**
      * 高效独立对象
@@ -41,12 +42,17 @@ var source = [
     './src/calculate/Velocity-Verlet.js',
     './src/calculate/Coulomb\'s law.js',
     './src/calculate/rotate.js',
+    './src/calculate/transform.js',
 
     /**
      * 2D图形
      */
     './src/graphics/index.js',
     './src/graphics/arc.js',
+    './src/graphics/rect.js',
+    './src/graphics/line.js',
+    './src/graphics/text.js',
+    './src/graphics/bezier.js',
 
     /**
      * 布局
@@ -69,8 +75,6 @@ var banner = '/*!\n*\n' +
     '* <%= pkg.repository.url %>\n' +
     '* \n' +
     '* author <%= pkg.author %>\n' +
-    '*\n' +
-    '* version <%= pkg.version %>\n' +
     '* \n' +
     '* build Sun Jul 29 2018\n' +
     '*\n' +
@@ -91,19 +95,19 @@ module.exports = function (grunt) {
             },
             target: {
                 src: source,
-                dest: 'build/clay.js'
+                dest: 'build/clay.temp.js'
             }
         },
         build: {//自定义插入合并
             target: {
                 banner: banner,
-                src: 'build/clay.js',
-                dest: ['build/clay-<%= pkg.version %>.js']
+                src: 'build/clay.temp.js',
+                dest: ['build/clay.js']
             }
         },
         clean: {// 删除临时文件
             target: {
-                src: ['build/clay.js']
+                src: ['build/clay.temp.js']
             }
         },
         jshint: { //语法检查
@@ -125,12 +129,14 @@ module.exports = function (grunt) {
                     "CanvasRenderingContext2D": true,
                     "WebGLRenderingContext": true,
                     "NodeList": true,
+                    "XMLHttpRequest": true,
+                    "ActiveXObject": true,
                     "clay": true
                 },
                 "force": true, // 强制执行，即使出现错误也会执行下面的任务
                 "reporterOutput": 'jshint.debug.txt' //将jshint校验的结果输出到文件
             },
-            target: 'build/clay-<%= pkg.version %>.js'
+            target: 'build/clay.js'
         },
         uglify: { //压缩代码
             options: {
@@ -141,30 +147,11 @@ module.exports = function (grunt) {
                     mangle: true
                 },
                 files: [{
-                    'build/clay-<%= pkg.version %>.min.js': ['build/clay-<%= pkg.version %>.js']
+                    'build/clay.min.js': ['build/clay.js']
                 }]
             }
         },
-        qunit: {//单元测试
-            target: {
-                options: {
-                    httpBase: "http://localhost:30000",
-                    force: true,//一个任务失败了依旧不停止
-                    urls: [
-                        'test/unit/node.html',
-                        'test/unit/data.html',
-                        'test/unit/calculate.html'
-                    ]
-                }
-            }
-        },
         connect: {
-            target: {//给单元测试用的服务器
-                options: {
-                    port: 30000,
-                    base: '.'
-                }
-            },
             server: {//本地服务器
                 options: {
                     keepalive: true,
@@ -180,7 +167,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-connect');
 
     // clay特殊的任务
@@ -188,6 +174,5 @@ module.exports = function (grunt) {
 
     /*注册任务*/
     grunt.registerTask('release', ['concat:target', 'build:target', 'clean:target', 'jshint:target', 'uglify:target']);
-    grunt.registerTask('test', ['connect:target', 'qunit:target']);
     grunt.registerTask('server', ['connect:server']);
 };
