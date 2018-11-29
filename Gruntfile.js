@@ -1,158 +1,11 @@
 'use strict';
 
-var source = [
-
-    /**
-     * 核心代码
-     */
-    './src/config.js',
-    './src/sizzle.js',
-    './src/modify.js',
-    './src/data.js',
-    './src/event.js',
-
-    /**
-     * 工具类
-     */
-    './src/Tools/animation.js',
-    './src/Tools/tool.js',
-    './src/Tools/ajax.js',
-
-    /**
-     * 高效独立对象
-     */
-    './src/Tools/region.js',
-    './src/Tools/canvas.js',
-
-    /**
-     * 变换矩阵4x4
-     */
-    './src/Matrix4/move.js',
-    './src/Matrix4/rotate.js',
-    './src/Matrix4/scale.js',
-    './src/Matrix4/transform.js',
-    './src/Matrix4/index.js',
-
-    /**
-     * 基础计算
-     */
-    './src/calculate/interpolate/Hermite.js',
-    './src/calculate/interpolate/Cardinal.js',
-    './src/calculate/map.js',
-    './src/calculate/Velocity-Verlet.js',
-    './src/calculate/Coulomb\'s law.js',
-    './src/calculate/rotate.js',
-    './src/calculate/transform.js',
-
-    /**
-     * 2D图形
-     */
-    './src/graphics/index.js',
-    './src/graphics/arc.js',
-    './src/graphics/rect.js',
-    './src/graphics/line.js',
-    './src/graphics/text.js',
-    './src/graphics/bezier.js',
-
-    /**
-     * 布局
-     */
-    './src/layout/tree.js',
-    './src/layout/force.js',
-
-    /**
-     * 3D核心接口
-     */
-    './src/webgl/shader.js',
-    './src/webgl/buffer.js',
-    './src/webgl/texture.js',
-    './src/webgl/index.js'
-
-];
-
-var banner = '/*!\n*\n' +
-    '* <%= pkg.name %> - <%= pkg.description %>\n' +
-    '* <%= pkg.repository.url %>\n' +
-    '* \n' +
-    '* author <%= pkg.author %>\n' +
-    '* \n' +
-    '* build Sun Jul 29 2018\n' +
-    '*\n' +
-    '* Copyright yelloxing\n' +
-    '* Released under the <%= pkg.license %> license\n' +
-    '* \n' +
-    '* Date:' + new Date() + '\n' +
-    '*/\n';
-
 module.exports = function (grunt) {
     /*配置插件*/
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        concat: { //合并代码
-            options: {
-                separator: '\n',
-                stripBanners: true
-            },
-            target: {
-                src: source,
-                dest: 'build/clay.temp.js'
-            }
-        },
-        build: {//自定义插入合并
-            target: {
-                banner: banner,
-                src: 'build/clay.temp.js',
-                dest: ['build/clay.js']
-            }
-        },
-        clean: {// 删除临时文件
-            target: {
-                src: ['build/clay.temp.js']
-            }
-        },
-        jshint: { //语法检查
-            options: { //语法检查配置
-                '-W064': true,
-                "strict": true,
-                "eqnull": true,
-                "undef": true,
-                "globals": {
-                    "window": true,
-                    "navigator": true,
-                    "document": true,
-                    "console": true,
-                    "module": true,
-                    "setInterval": true,
-                    "clearInterval": true,
-                    "Math": true,
-                    "HTMLCollection": true,
-                    "CanvasRenderingContext2D": true,
-                    "WebGLRenderingContext": true,
-                    "NodeList": true,
-                    "XMLHttpRequest": true,
-                    "ActiveXObject": true,
-                    "clay": true
-                },
-                "force": true, // 强制执行，即使出现错误也会执行下面的任务
-                "reporterOutput": 'jshint.debug.txt' //将jshint校验的结果输出到文件
-            },
-            target: 'build/clay.js'
-        },
-        uglify: { //压缩代码
-            options: {
-                banner: banner
-            },
-            target: {
-                options: {
-                    mangle: true
-                },
-                files: [{
-                    'build/clay.min.js': ['build/clay.js']
-                }]
-            }
-        },
         connect: {
-            server: {//本地服务器
+            server: {
                 options: {
                     keepalive: true,
                     port: 20000,
@@ -162,17 +15,7 @@ module.exports = function (grunt) {
         }
     });
 
-    /*加载插件*/
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-connect');
 
-    // clay特殊的任务
-    grunt.loadTasks("build/tasks");
-
-    /*注册任务*/
-    grunt.registerTask('release', ['concat:target', 'build:target', 'clean:target', 'jshint:target', 'uglify:target']);
     grunt.registerTask('server', ['connect:server']);
 };

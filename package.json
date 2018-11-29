@@ -2,8 +2,7 @@
   "name": "clay-laboratory",
   "description": "用于实验未来新功能的基地!",
   "scripts": {
-    "server": "node_modules/.bin/grunt server",
-    "start": "node_modules/.bin/grunt release"
+    "start": "node_modules/.bin/grunt server"
   },
   "repository": {
     "type": "git",
@@ -13,11 +12,6 @@
   "license": "MIT",
   "devDependencies": {
     "grunt": "^1.0.3",
-    "grunt-contrib-clean": "^2.0.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-connect": "^2.0.0",
-    "grunt-contrib-jshint": "^2.0.0",
-    "grunt-contrib-qunit": "^3.0.1",
-    "grunt-contrib-uglify": "^4.0.0"
+    "grunt-contrib-connect": "^2.0.0"
   }
 }
