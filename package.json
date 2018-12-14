@@ -6,7 +6,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yelloxing/clay.git"
+    "url": "git+https://github.com/yelloxing/clay-core.git"
   },
   "author": "心叶",
   "license": "MIT",
