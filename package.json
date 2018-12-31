@@ -13,5 +13,8 @@
   "devDependencies": {
     "grunt": "^1.0.3",
     "grunt-contrib-connect": "^2.0.0"
+  },
+  "dependencies": {
+    "clay-core": "^1.6.0"
   }
 }
